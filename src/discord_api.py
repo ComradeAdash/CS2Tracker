@@ -39,7 +39,6 @@ async def skin(interaction: discord.Interaction, skin: str): # the skin is the u
     await interaction.response.defer()
 
     result = weapon_skin.search_skin(skin)
-    embed = discord.Embed(title=" ", description=" ")
     # await interaction.response.send_message(embed=embed) NOT SURE IF THIS IS NEEDED
     
     if result:
@@ -49,7 +48,8 @@ async def skin(interaction: discord.Interaction, skin: str): # the skin is the u
 
         # format the information in our embed over here
 
-        embed.add_field(name="Results!!", value=f''' Skin Lemur has found {skin_name}!! OHHHhh YEAHHhh!! ''')
+        embed = discord.Embed(title="Results!! ", description=f''' Skin Lemur has found {skin_name}!! OHHHhh YEAHHhh!! ''')
+
         embed.add_field(name="Lowest Price: ", value = f''' {data.get('lowest_price')} ''')
         embed.add_field(name="Median Price: ", value = f''' {data.get('median_price')} ''')
 
