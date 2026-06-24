@@ -7,6 +7,6 @@ Skin Lemur is a discord bot that shows prices for Counter-Strike 2 skins current
 
 ``` /skin ak47 vulcan ft ```
 
-The query should be in the "WEAPON SKIN_NAME WEAR" format, as shown above. 
+The query should be in the "weapon skin-name wear/quality" format, as shown above. 
 
 
