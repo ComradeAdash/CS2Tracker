@@ -1,4 +1,4 @@
-import data.steam_skins as steam_skins
+import data.steam as steam
 import discord
 import data.weapon_skin as weapon_skin
 from discord.ext import commands
@@ -43,7 +43,7 @@ async def skin(interaction: discord.Interaction, skin: str): # the skin is the u
     
     if result:
         skin_name = result
-        data = steam_skins.fetch_request(skin_name, steam_skins.parameters)
+        data = steam.fetch_request(skin_name, steam.parameters)
         print(data)
 
         # format the information in our embed over here

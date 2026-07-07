@@ -1,6 +1,9 @@
 """
 
-Request methods for the Steam API to get CS2 skin prices and names.
+Steam Community Market price retrieval methods
+
+Notes: 
+
 
 """
 
@@ -17,8 +20,7 @@ parameters = {
     "format" : "json"
 }
 
-# ------------ Request Methods ----------------
-
+# Returns json data of queried CS2 skin on the Steam community marketplace
 def fetch_request(the_skin, params=None, headers=None, timeout=10):
     if params is None:
         params = {}
@@ -30,6 +32,7 @@ def fetch_request(the_skin, params=None, headers=None, timeout=10):
     else:
         print(f"Error: Unable to fetch data, status code {response.status_code}")
 
+# Returns all current market hashnames of CS2 weapoon skins
 def get_all_skin_names(url, params=None, headers=None, timeout=10):
     skin_names = []
     data = requests.get(skin_names_url).json()
@@ -37,8 +40,3 @@ def get_all_skin_names(url, params=None, headers=None, timeout=10):
         hash_name =  it.get("market_hash_name")
         skin_names.append(hash_name)
     return skin_names
-
-# ------------ Testing ----------------     
-
-# skin_array = get_all_skin_names(skin_names_url)
-# print(skin_array)

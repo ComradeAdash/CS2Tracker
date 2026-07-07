@@ -1,10 +1,16 @@
-# Issues - skins that dont exist such as AWP asiimov fn (they only come in ft) create a mismatch
+'''
+
+Weapon skin name normalization / searching methods
+
+Issues: skins that dont exist such as AWP asiimov fn (they only come in ft) create a mismatch
+
+'''
 
 import re
-import data.steam_skins as steam_skins
-from rapidfuzz import process, fuzz # rapid fuzz helps process match user queries to actual skins
+import data.steam as steam
+from rapidfuzz import fuzz
 
-SKIN_ARRAY = steam_skins.get_all_skin_names(steam_skins.skin_names_url)
+SKIN_ARRAY = steam.get_all_skin_names(steam.skin_names_url)
 
 wear_map =  {
 "ft": "(Field Tested)",
@@ -14,6 +20,7 @@ wear_map =  {
 "ww": "(Well Worn)"
 }
 
+# Strips the query down, so it's easy to process
 def normalize(input):
     for abbr, full in wear_map.items():
         input = re.sub(rf"\b{abbr}\b", full, input)
@@ -23,16 +30,14 @@ def normalize(input):
 
     return input
 
-# taking in a user input query, normalizing it, and checking for the skin
-# returns the matched skin name from the CS2 item json data
-
-#intended input ex) "ak47 redline fn"
+# Taking in a user input query, normalizing it, and checking for the skin
+# Returns the matched skin name from the CS2 item json data
+#Intended input ex) "ak47 redline fn"
 def search_skin(user_query):
     NORM_SKIN_ARRAY = [normalize(skin) for skin in SKIN_ARRAY]
     best_match = None
     best_score = 0
 
-    # parse the input down
     norm_input = normalize(user_query)
     print(norm_input)
 
