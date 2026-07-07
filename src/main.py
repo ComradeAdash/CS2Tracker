@@ -1,6 +1,6 @@
 # This is how the whole program will be ran at the end
 
-import discord_api
+import bot.discord_api as discord_api
 from dotenv import load_dotenv
 import os
 

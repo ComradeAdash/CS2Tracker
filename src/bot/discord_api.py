@@ -1,6 +1,6 @@
-import steam_skins
+import data.steam_skins as steam_skins
 import discord
-import weapon_skin
+import data.weapon_skin as weapon_skin
 from discord.ext import commands
 from discord import app_commands
 

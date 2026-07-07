@@ -1,7 +1,7 @@
 # Issues - skins that dont exist such as AWP asiimov fn (they only come in ft) create a mismatch
 
 import re
-import steam_skins
+import data.steam_skins as steam_skins
 from rapidfuzz import process, fuzz # rapid fuzz helps process match user queries to actual skins
 
 SKIN_ARRAY = steam_skins.get_all_skin_names(steam_skins.skin_names_url)

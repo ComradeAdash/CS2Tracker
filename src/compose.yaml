@@ -1,0 +1,17 @@
+# connect to postgress using: psql -h localhost -p 5433 -U skinlemur -d skinlemur
+services:
+  database:
+    image: postgres:16
+    container_name: skin_lemur_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: skinlemur
+      POSTGRES_PASSWORD: apple
+      POSTGRES_DB: skinlemur
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
