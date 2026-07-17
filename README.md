@@ -1,8 +1,15 @@
-# Skin Lemur
+# CS2Tracker
 
-Skin Lemur is a discord bot that shows prices for Counter-Strike 2 skins listed on CS Float and the Steam community marketplace :DD
+This project currently tracks CS2 skin prices by using the SkinPort V1 API endpoint. It pulls all active listings and
+stores them into a PostgreSQL database using Cron for regular updates.
 
-## Commands
+# Features
+
+## Skin Lemur
+
+Skin Lemur is a supplementary discord bot that shows prices for live listings on the Steam Community Marketplace, CSFloat, and SkinPort :DD
+
+### Commands
 
 ### Steam Market Price - /skin
 

@@ -34,7 +34,3 @@ def get_sp_json(currency="CAD", tradable=0):
     r  = httpx.get(ITEMS,params=params)
 
     return r.json()
-
-skins = get_sp_json()
-
-print(len(skins))

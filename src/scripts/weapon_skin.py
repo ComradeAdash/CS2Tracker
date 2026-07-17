@@ -7,7 +7,7 @@ Issues: skins that dont exist such as AWP asiimov fn (they only come in ft) crea
 '''
 
 import re
-import data.steam as steam
+import scripts.steam as steam
 from rapidfuzz import fuzz
 
 SKIN_ARRAY = steam.get_all_skin_names(steam.skin_names_url)
