@@ -3,8 +3,7 @@ CREATE TABLE IF NOT EXISTS skins (
     market_hash_name TEXT UNIQUE NOT NULL,
     weapon TEXT,
     skin_name TEXT,
-    wear TEXT,
-    rarity TEXT
+    wear TEXT
 );
 
 CREATE TABLE IF NOT EXISTS skin_prices (
