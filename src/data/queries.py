@@ -26,18 +26,39 @@ class Database:
             print(error)
 
     # insert into both skins and skin_prices
-    def insert():
-        pass
+    def insert(self):
+        conn = None
+        cur = None
+
+        try:
+            conn = self.connect_to_database()
+            cur = conn.cursor()
+            data = sp.get_sp_json()
+
+            for item in data:
+                self.insert_price(cur,item)
+
+            conn.commit()
+        except Exception as error:
+            print(error)
+        finally:
+            if cur is not None:
+                cur.close()
+            if conn is not None:
+                conn.close()
 
     # Inserting / Updating the skins database with skin names and ids, assuming a connection is already open
     # A string like 'market_hash_name': 'UMP-45 | Primal Saber (Minimal Wear)' is parsed into
-    # market_hash_name, weapon, skin_name, wear and inserted into 'skins'
+    # market_hash_name, weapon, skin_name, wear and inserted into the respective Knife, Glove, Case, Weaopon, Sticker table. 
     def insert_skin(self,cur,full_hash_name: str):
-        # parse what we want
-        separate= [
+        separate = [
             value for value in re.split(r"[,| ()]+", full_hash_name)
             if value
         ]
+        
+        # Need to insert into the correct table
+        
+        
         # insert market_hash_name, weapon, skin_name, wear
         insert_hash_data = ''' 
             INSERT INTO skins (
@@ -49,51 +70,43 @@ class Database:
             VALUES (%s, %s, %s, %s)
             ON CONFLICT (market_hash_name) DO NOTHING;
         '''
-        cur.execute(insert_hash_data,full_hash_name, separate[0], separate[1], separate[2])
+        cur.execute(insert_hash_data, (full_hash_name, separate[0], separate[1], separate[2]))
     
     # Updating the skin_prices database with the Skin-Port API data
-    def insert_price(self):
-        conn = None
-        cur = None
-
-        try:
-            conn = self.connect_to_database()
-            cur = conn.cursor()
-            data = sp.get_sp_json()
-        
-            for item in data:
-                #insert price data into skin_prices table
-                insert_price_data = ''' 
-                    INSERT INTO skin_prices (
-                        market_hash_name,
-                        weapon,
-                        skin_name,
-                        wear
-                    )
-                    VALUES (%s, %s, %s, %s)
-                    ON CONFLICT (market_hash_name) DO NOTHING;
-                '''
-                cur.execute(insert_price_data)
-                pass
+    def insert_price(self,cur,item):
+        #insert price data into skin_prices table
+        insert_price_data = ''' 
+            INSERT INTO skin_prices (
+                market_hash_name,
+                source,
+                currency,
+                min_price,
+                max_price,
+                mean_price,
+                median_price,
+                suggested_price,
+                quantity
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        '''
+        params = (
+            item['market_hash_name'],"Skin-Port",item['currency'],
+            item['min_price'],item['max_price'],item['mean_price'],
+            item['median_price'],item['suggested_price'],item['quantity']
+        )
+        cur.execute(insert_price_data,params)
             
-        except Exception as error:
-            print(error)
-        finally:
-            if cur is not None:
-                cur.close()
-            if conn is not None:
-                conn.close()
 
 # Methods
 
 # a simple function that tests our database connectivity
-def test_bot():
+def test_conn():
     testdb = Database(cfg.DATABASE_URL)
     print(testdb.connect_to_database())
 
 
 def run_bot():
     testdb = Database(cfg.DATABASE_URL)
-    testdb.insert_skin("AK-47 | Asiimov (Well-Worn)")
+    testdb.insert()
 
     # testdb.update_database()
