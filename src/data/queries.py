@@ -23,7 +23,7 @@ EXTERIOR_ORDER = {
     "Battle-Scarred": 5,
 }
 
-WEAPON_CATEGORIES = {
+WEAPON_TYPES = {
 
     "CZ75-Auto": "Pistol",
     "Desert Eagle": "Pistol",
@@ -94,6 +94,17 @@ WEAPON_CATEGORIES = {
     "Sport Gloves": "Gloves",
 }
 
+# main target categories
+CATEGORIES = [
+    "Knife",
+    "Gloves",
+    "Pistol",
+    "Rifle",
+    "SMG",
+    "heavy",
+    "agent"
+]
+
 SKIN_PATTERN = re.compile(
     r"^(?P<weapon>.+?)"
     r"\s\|\s"
@@ -113,12 +124,74 @@ class Database:
         self.database_url = database_url
         self.table_names: list[str] = []
 
+    # determines what category the incoming item is
+    # We can use the market page attribute to get the item category
+    # Ex) 'https://skinport.com/market/smg/ump-45?item=Primal%20Saber' - here we can extract the 'smg' part. 
+    def get_cat(self,url):
+        lowered_cat = [item.lower() for item in CATEGORIES]
+        result = url.split("/")
+        for item in lowered_cat:
+            if item in url.lower():
+                result = result[4]
+                print(result)
+                return result
+
+        # Ex) the category format is like 'https://skinport.com/market/collectible?item=Office+Pin' 
+        result = result[4].split("?")
+        #print(result[0])
+        return result[0]
+
     # Creating a simple database connection
     def connect_to_database(self):
         try:
             return psycopg.connect(self.database_url)
         except Exception as error:
             print(error)
+
+    def get_source_id(self,cur,source_name: str = "Skinport"):
+        query = """
+            SELECT source_id
+            FROM sources
+            WHERE name = %s;
+        """
+
+        cur.execute(query,(source_name,))
+        result = cur.fetchone()
+
+        if result is None:
+            raise ValueError(
+                f"Source '{source_name}' does not exist."
+            )
+
+        return result[0]
+
+    def make_run(self,cur,source_id: int,currency: str,items_received: int):
+        query = """
+            INSERT INTO runs (
+                source_id,
+                currency,
+                items_received
+            )
+            VALUES (%s, %s, %s)
+            RETURNING run_id;
+        """
+
+        cur.execute(
+            query,
+            (
+                source_id,
+                currency,
+                items_received
+            )
+        )
+
+        return cur.fetchone()[0]
+
+    def update_item(self):
+        pass
+
+    def check_run(self):
+            pass
 
     # insert into both skins and skin_prices
     def insert(self):
@@ -130,8 +203,9 @@ class Database:
             cur = conn.cursor()
             data = sp.get_sp_json()
 
+            # process each item that we got from the API
             for item in data:
-                self.insert_price(cur,item)
+                pass
 
             conn.commit()
         except Exception as error:
@@ -142,58 +216,6 @@ class Database:
             if conn is not None:
                 conn.close()
 
-    # Inserting / Updating the skins database with skin names and ids, assuming a connection is already open
-    # A string like 'market_hash_name': 'UMP-45 | Primal Saber (Minimal Wear)' is parsed into
-    # market_hash_name, weapon, skin_name, wear and inserted into the respective Knife, Glove, Case, Weaopon, Sticker table. 
-    def insert_skin(self,cur,full_hash_name: str):
-        separate = [
-            value for value in re.split(r"[,| ()]+", full_hash_name)
-            if value
-        ]
-        
-        # Need to insert into the correct table
-        
-        
-        # insert market_hash_name, weapon, skin_name, wear
-        insert_hash_data = ''' 
-            INSERT INTO skins (
-                market_hash_name,
-                weapon,
-                skin_name,
-                wear
-            )
-            VALUES (%s, %s, %s, %s)
-            ON CONFLICT (market_hash_name) DO NOTHING;
-        '''
-        cur.execute(insert_hash_data, (full_hash_name, separate[0], separate[1], separate[2]))
-    
-    # Updating the skin_prices database with the Skin-Port API data
-    def insert_price(self,cur,item):
-        #insert price data into skin_prices table
-        insert_price_data = ''' 
-            INSERT INTO skin_prices (
-                market_hash_name,
-                source,
-                currency,
-                min_price,
-                max_price,
-                mean_price,
-                median_price,
-                suggested_price,
-                quantity
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        '''
-        params = (
-            item['market_hash_name'],"Skin-Port",item['currency'],
-            item['min_price'],item['max_price'],item['mean_price'],
-            item['median_price'],item['suggested_price'],item['quantity']
-        )
-        cur.execute(insert_price_data,params)
-            
-
-# Methods
-
 # a simple function that tests our database connectivity
 def test_conn():
     testdb = Database(cfg.DATABASE_URL)
@@ -202,6 +224,7 @@ def test_conn():
 
 def run_bot():
     testdb = Database(cfg.DATABASE_URL)
-    testdb.insert()
+    testdb.get_cat()
+    # testdb.insert()
 
     # testdb.update_database()
