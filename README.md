@@ -7,7 +7,7 @@ stores them into a PostgreSQL database using Cron for regular updates.
 
 ## Skin Lemur
 
-Skin Lemur is a supplementary discord bot that shows prices for live listings on the Steam Community Marketplace, CSFloat, and SkinPort :DD
+Skin Lemur is a supplementary discord bot (also a really cool Lemur) that shows prices for live listings on the Steam Community Marketplace
 
 ### Commands
 
