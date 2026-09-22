@@ -5,11 +5,6 @@ CREATE TABLE IF NOT EXISTS item_categories(
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS rarities(
-    rarity_id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(50) NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS weapons(
     weapon_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
@@ -19,12 +14,7 @@ CREATE TABLE IF NOT EXISTS weapons(
 CREATE TABLE IF NOT EXISTS exteriors(
     exterior_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE,
-    sort_order SMALLINT NOT NULL UNIQUE
-);
-
-CREATE TABLE IF NOT EXISTS item_collections (
-    collection_id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name VARCHAR(150) NOT NULL UNIQUE
+    quality_order INTEGER 
 );
 
 CREATE TABLE IF NOT EXISTS sources (
@@ -38,8 +28,6 @@ CREATE TABLE IF NOT EXISTS items (
     display_name VARCHAR(255),
     category_id INTEGER NOT NULL
         REFERENCES item_categories(category_id),
-    rarity_id INTEGER
-        REFERENCES rarities(rarity_id),
     is_stattrak BOOLEAN NOT NULL DEFAULT FALSE,
     is_souvenir BOOLEAN NOT NULL DEFAULT FALSE,
     first_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -58,10 +46,7 @@ CREATE TABLE IF NOT EXISTS skin_details (
     skin_name VARCHAR(150),
 
     exterior_id INTEGER
-        REFERENCES exteriors(exterior_id),
-
-    collection_id INTEGER
-        REFERENCES item_collections(collection_id)
+        REFERENCES exteriors(exterior_id)
 );
 
 CREATE TABLE IF NOT EXISTS runs (
@@ -138,17 +123,9 @@ ON item_prices (observed_at DESC);
 CREATE INDEX IF NOT EXISTS idx_items_category
 ON items (category_id);
 
--- for rarity analysis
-CREATE INDEX IF NOT EXISTS idx_items_rarity
-ON items (rarity_id);
-
 -- for analyzing prices by weapon
 CREATE INDEX IF NOT EXISTS idx_skin_details_weapon
 ON skin_details (weapon_id);
-
--- for analyzing collections
-CREATE INDEX IF NOT EXISTS idx_skin_details_collection
-ON skin_details (collection_id);
 
 -- for wear / exterior analysis
 CREATE INDEX IF NOT EXISTS idx_skin_details_exterior
