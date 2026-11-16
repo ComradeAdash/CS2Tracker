@@ -1,27 +1,8 @@
 <div align="center">
-  <h1 align="center">CS2Tracker</h1>
+  <h1 align="center">Counter-Strike 2 Item Tracker</h1>
 
   <p align="center">
-    <a href="https://github.com/ComradeAdash/cs_skin_tracker/graphs/contributors">
-      <img src="https://img.shields.io/github/contributors/ComradeAdash/cs_skin_tracker.svg?style=for-the-badge" alt="Contributors" />
-    </a>
-    <a href="https://github.com/ComradeAdash/cs_skin_tracker/network/members">
-      <img src="https://img.shields.io/github/forks/ComradeAdash/cs_skin_tracker.svg?style=for-the-badge" alt="Forks" />
-    </a>
-    <a href="https://github.com/ComradeAdash/cs_skin_tracker/stargazers">
-      <img src="https://img.shields.io/github/stars/ComradeAdash/cs_skin_tracker.svg?style=for-the-badge" alt="Stargazers" />
-    </a>
-    <a href="https://github.com/ComradeAdash/cs_skin_tracker/issues">
-      <img src="https://img.shields.io/github/issues/ComradeAdash/cs_skin_tracker.svg?style=for-the-badge" alt="Issues" />
-    </a>
-    <br /><br />
-    Wondering what that skin is going for? Ask Skin Lemur.
-    <br /><br />
-    Track CS2 skin prices over time and check Steam Market prices directly from Discord.
-    <br /><br />
-    <a href="https://github.com/ComradeAdash/cs_skin_tracker/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/ComradeAdash/cs_skin_tracker/issues">Request Feature</a>
+    Track Counter-strike 2 skin prices over time and check Steam Market prices directly from Discord
   </p>
 </div>
 
